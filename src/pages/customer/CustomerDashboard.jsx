@@ -12,35 +12,42 @@ const CustomerDashboard = () => {
 
 
 
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken"); // get token after login
+useEffect(() => {
+  const token = localStorage.getItem("accessToken"); // get token after login
 
-    const fetchJobs = async () => {
-      if (!token) {
-        setError("No access token found, please log in.");
-        setLoading(false);
-        return;
-      }
+  const fetchJobs = async () => {
+    if (!token) {
+      setError("No access token found, please log in.");
+      setLoading(false);
+      return;
+    }
 
-      try {
-        const res = await axios.get("/api/jobs/my-jobs", {
-          headers: {
-            Authorization: `Bearer ${token}`,  // <-- send token here
-          },
-          withCredentials: true,  // for cookies if you use refresh tokens
-        });
-        setJobs(res.data);
-        setError(null);
-      } catch (err) {
-        setError("Failed to load your jobs");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      const res = await axios.get("/api/jobs/my-jobs", {
+        headers: {
+          Authorization: `Bearer ${token}`, // <-- send token
+        },
+        withCredentials: true,
+      });
 
-    fetchJobs();
-  }, []);
+      console.log("Jobs API response:", res.data);
+
+      // ✅ Ensure jobs is always an array before setting state
+      const data = Array.isArray(res.data) ? res.data : [];
+      setJobs(data);
+      setError(null);
+    } catch (err) {
+      setError("Failed to load your jobs");
+      console.error("Job fetch error:", err.response?.data || err.message);
+      setJobs([]); // ✅ fallback to empty array on error
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchJobs();
+}, []);
+
 
 
 
@@ -85,3 +92,4 @@ const CustomerDashboard = () => {
 };
 
 export default CustomerDashboard;
+
