@@ -1,10 +1,8 @@
 import axios from "axios";
 
-// Example axios config
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000",
-  withCredentials: true,
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:5000",
+  withCredentials: true, // needed for cookies (refresh tokens)
 });
-
 
 export default axiosInstance;
