@@ -2,7 +2,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/auth`;
+const API_URL = "https://tmsbackend-tms.up.railway.app/api/auth";
+
 console.log("API_URL from env:", process.env.NEXT_PUBLIC_API_URL);
 
 const AuthContext = createContext();
@@ -185,4 +186,5 @@ const register = async ({ name, username, password }) => {
     </AuthContext.Provider>
   );
 };
+
 
